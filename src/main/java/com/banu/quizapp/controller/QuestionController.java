@@ -1,29 +1,40 @@
 package com.banu.quizapp.controller;
 
-
-import com.banu.quizapp.Question;
+import com.banu.quizapp.model.Question;
 import com.banu.quizapp.service.QuestionService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("question")
+@RequestMapping("/question")
 public class QuestionController {
 
-    @Autowired
-     QuestionService questionService;
 
-    @GetMapping("allQuestions")
+     private final QuestionService questionService;
+
+     public QuestionController(QuestionService questionService) {
+         this.questionService = questionService;
+     }
+
+    @GetMapping("/allQuestions")
     public List<Question> getAllQuestions() {
         return questionService.getAllQuestions();
     }
 
-    @GetMapping("category")
-    public List<Question> getCategory() { return null;}
+    @GetMapping("/difficulty/{difficultylevel}")
+    public List<Question> getQuestionsByDifficulty(@PathVariable String difficultylevel) {
+        return questionService.getQuestionByDifficulty(difficultylevel);
+    }
+
+    @PostMapping("/addQuestion")
+    public String addQuestion(@RequestBody Question question) {
+         return questionService.addQuestion(question);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String deleteQuestion(@PathVariable Integer id) {
+         return questionService.deleteQuestion(id);
+    }
 
 
 
