@@ -1,11 +1,11 @@
 package com.banu.quizapp.service;
 
-
 import com.banu.quizapp.dao.QuestionDao;
 import com.banu.quizapp.dao.QuizDao;
 import com.banu.quizapp.model.Question;
 import com.banu.quizapp.model.QuestionWrapper;
 import com.banu.quizapp.model.Quiz;
+import com.banu.quizapp.model.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -50,5 +50,22 @@ public class QuizService {
         }
 
         return new ResponseEntity<>(questionsForUser, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Integer> calculateResult(Integer id, List<Response> response) {
+        Optional<Quiz> quiz = quizDao.findById(id);
+        List<Question> questions = quiz.get().getQuestions();
+        int right = 0;
+        int i = 0;
+
+        for (Response r : response) {
+            if(r.getResponse().equals(questions.get(i).getRightAnswer())) {
+                right++;
+            }
+            i++;
+        }
+
+        return new ResponseEntity<>(right, HttpStatus.OK);
+
     }
 }
