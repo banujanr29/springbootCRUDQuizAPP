@@ -2,6 +2,7 @@ package com.banu.quizapp.controller;
 
 import com.banu.quizapp.model.QuestionWrapper;
 import com.banu.quizapp.model.Quiz;
+import com.banu.quizapp.model.Response;
 import com.banu.quizapp.service.QuizService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,11 @@ public class QuizController {
     @GetMapping("/get/{id}")
     public ResponseEntity<List<QuestionWrapper>> getQuizQuestions(@PathVariable Integer id) {
         return quizService.getQuizQuestion(id);
+    }
+
+    @PostMapping("/submit/{id}")
+    public ResponseEntity<Integer> submitQuiz(@PathVariable Integer id, @RequestBody List<Response> response) {
+        return quizService.calculateResult(id, response);
     }
 
 }
